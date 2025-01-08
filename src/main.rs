@@ -23,11 +23,11 @@ struct AdbSettings {
     device_name: String,
 }
 
-fn pull_files(source_path: String, destination_path: String, settings: AdbSettings) -> Result<(), AdbError> {
-    execute_adb(&["pull", &source_path, &destination_path], settings)
+fn pull_files(source_path: &String, destination_path: &String, settings: &AdbSettings) -> Result<(), AdbError> {
+    execute_adb(&["pull", source_path, destination_path], settings)
 }
 
-fn execute_adb(args: &[&str], settings: AdbSettings) -> Result<(), AdbError> {
+fn execute_adb(args: &[&str], settings: &AdbSettings) -> Result<(), AdbError> {
     let (stdout, stderr) = if settings.verbose {
         (Stdio::inherit(), Stdio::inherit())
     } else {
@@ -35,7 +35,7 @@ fn execute_adb(args: &[&str], settings: AdbSettings) -> Result<(), AdbError> {
     };
 
     let mut child = Command::new("adb")
-        .arg("-s").arg(settings.device_name)
+        .arg("-s").arg(&settings.device_name)
         .args(args)
         .stdout(stdout)
         .stderr(stderr)
@@ -53,9 +53,9 @@ fn execute_adb(args: &[&str], settings: AdbSettings) -> Result<(), AdbError> {
 
 fn main() {
     let result = pull_files(
-        String::from("/storage/emulated/0/DCIM/Camera/"),
-        String::from("/Users/aniketgargya/Documents/GitHub/android-file-fetch/test"),
-        AdbSettings {
+        &String::from("/storage/emulated/0/DCIM/Camera/"),
+        &String::from("/Users/aniketgargya/Documents/GitHub/android-file-fetch/test"),
+        &AdbSettings {
             device_name: String::from("2B191JEG509242"),
             verbose: true,
         },

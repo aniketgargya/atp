@@ -18,16 +18,24 @@ impl std::fmt::Display for AdbError {
     }
 }
 
-fn pull_files(device_name: String, source_path: String, destination_path: String, verbose: bool) -> Result<(), AdbError> {
-    execute_adb(&["pull", &source_path, &destination_path], device_name, verbose)
+struct AdbSettings {
+    verbose: bool,
+    device_name: String,
 }
 
-fn execute_adb(args: &[&str], device_name: String, verbose: bool) -> Result<(), AdbError> {
-    let stdout = if verbose { Stdio::inherit() } else { Stdio::null() };
-    let stderr = if verbose { Stdio::inherit() } else { Stdio::null() };
+fn pull_files(source_path: String, destination_path: String, settings: AdbSettings) -> Result<(), AdbError> {
+    execute_adb(&["pull", &source_path, &destination_path], settings)
+}
+
+fn execute_adb(args: &[&str], settings: AdbSettings) -> Result<(), AdbError> {
+    let (stdout, stderr) = if settings.verbose {
+        (Stdio::inherit(), Stdio::inherit())
+    } else {
+        (Stdio::null(), Stdio::null())
+    };
 
     let mut child = Command::new("adb")
-        .arg("-s").arg(device_name)
+        .arg("-s").arg(settings.device_name)
         .args(args)
         .stdout(stdout)
         .stderr(stderr)
@@ -45,10 +53,12 @@ fn execute_adb(args: &[&str], device_name: String, verbose: bool) -> Result<(), 
 
 fn main() {
     let result = pull_files(
-        String::from("2B191JEG509242"),
         String::from("/storage/emulated/0/DCIM/Camera/"),
         String::from("/Users/aniketgargya/Documents/GitHub/android-file-fetch/test"),
-        true,
+        AdbSettings {
+            device_name: String::from("2B191JEG509242"),
+            verbose: true,
+        },
     );
 
     match result {

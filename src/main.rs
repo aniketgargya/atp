@@ -19,15 +19,15 @@ impl std::fmt::Display for AdbError {
 }
 
 fn pull_files(device_name: String, source_path: String, destination_path: String, verbose: bool) -> Result<(), AdbError> {
-    let args = [
-        "-s", &device_name,
-        "pull", &source_path, &destination_path,
-    ];
+    execute_adb(&["pull", &source_path, &destination_path], device_name, verbose)
+}
 
+fn execute_adb(args: &[&str], device_name: String, verbose: bool) -> Result<(), AdbError> {
     let stdout = if verbose { Stdio::inherit() } else { Stdio::null() };
     let stderr = if verbose { Stdio::inherit() } else { Stdio::null() };
 
     let mut child = Command::new("adb")
+        .arg("-s").arg(device_name)
         .args(args)
         .stdout(stdout)
         .stderr(stderr)

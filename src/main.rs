@@ -1,5 +1,32 @@
 use std::process::{ Command, Stdio };
-use std::path::{ Path };
+use std::path::Path;
+use clap::{ Parser, Subcommand };
+
+#[derive(Parser)]
+#[command(author = None, version = None, about = None, long_about = None)]
+struct Args {
+    #[command(subcommand)]
+    cmd: Commands
+}
+
+#[derive(Subcommand, Debug, Clone)]
+enum Commands {
+    PullFiles {
+        source_path: String,
+        destination_path: String,
+        device_name: String,
+        #[arg(long, default_value_t = false)]
+        verbose: bool,
+    },
+    PullFilesAfterModDate {
+        source_path: String,
+        destination_path: String,
+        mod_date: String,
+        device_name: String,
+        #[arg(long, default_value_t = false)]
+        verbose: bool,
+    },
+}
 
 enum AdbError {
     SpawnError(std::io::Error),
@@ -103,15 +130,23 @@ fn execute_adb(args: &[&str], settings: &AdbSettings) -> Result<(), AdbError> {
 }
 
 fn main() {
-    let result = pull_files_after_mod_date(
-        &String::from("/storage/emulated/0/DCIM/Camera/"),
-        &String::from("/Users/aniketgargya/Documents/GitHub/android-file-fetch/test"),
-        &String::from("2024-12-28"),
-        &AdbSettings {
-            device_name: String::from("2B191JEG509242"),
-            verbose: true,
-        },
-    );
+    let args = Args::parse();
+
+    let result = match args.cmd {
+        Commands::PullFiles { source_path, destination_path, device_name, verbose } =>
+            pull_files(
+                &source_path,
+                &destination_path,
+                &AdbSettings { device_name, verbose }
+            ),
+        Commands::PullFilesAfterModDate { source_path, destination_path, mod_date, device_name, verbose } =>
+            pull_files_after_mod_date(
+                &source_path,
+                &destination_path,
+                &mod_date,
+                &AdbSettings { device_name, verbose }
+            ),
+    };
 
     match result {
         Ok(()) => println!("Done!"),

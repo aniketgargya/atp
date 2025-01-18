@@ -1,8 +1,6 @@
 # Android Transfer Program
 
-A small CLI application written in Rust to transfer files to and from Android devices because Android File Transfer sucks now (or at least last time I checked). At this point[^1], it's probably easier to maintain this project than to try to get Android File Transfer to work. Currently, the program serves as a thin wrapper around the adb push and pull commands, and has a more sophisticated pull command that filters out files that were not modified after a supplied date[^1].
-
-Note, this program can be used to transfer any kind of file, not just photos as the name may imply, but I found the chosen name to be apt (enough)[^2].
+A small CLI application written in Rust to transfer files to and from Android devices because Android File Transfer sucks now (or at least last time I checked). At this point[^1], it's probably easier to maintain this project than to try to get Android File Transfer to work. Currently, the program serves as a thin wrapper around the adb push and pull commands, and has a more sophisticated pull command that filters out files that were not modified after a supplied date[^2].
 
 ## Commands
 
@@ -15,14 +13,13 @@ The `MOD_DATE` argument should be formatted as `YYYY-MM-DD`. It's also possible 
 
 The `DEVICE_NAME` argument should be the id of the target android device, which can be found by running `adb devices`.
 
-The `--verbose` flag can be added to any command to view all the adb output --- try this to diagnose any program failures.
+The `--verbose` flag can be added to any command to view all the adb output — try this to diagnose any program failures.
 
 ## Dependencies:
-- [adb](https://developer.android.com/tools/adb) --- Ensure that adb can be found via the `$PATH` variable.
+- [adb](https://developer.android.com/tools/adb): Ensure that adb can be found via the `$PATH` variable.
 
-[^1] haha, get it?
+[^1]: haha, get it?
 
-[^2] This was the original motivation behind this project, as the only way to do this was a long and ugly command that involved pipes and moderate bash scripting skills.
+[^2]: This was the original motivation behind this project, as the only way to do this was a long and ugly command that involved pipes and moderate bash scripting skills.
 
-[^3] See `newerXY`'s `t` in the (`find` man pages)[https://linux.die.net/man/1/find]
-
+[^3]: See `newerXY`'s `t` in the [`find` man pages](https://linux.die.net/man/1/find)

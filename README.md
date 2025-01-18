@@ -1,6 +1,8 @@
 # Android Transfer Program
 
-A small CLI application written in Rust to transfer files to and from Android devices because Android File Transfer sucks now (or at least last time I checked). At this point[^1], it's probably easier to maintain this project than to try to get Android File Transfer to work. Currently, the program serves as a thin wrapper around the adb push and pull commands, and has a more sophisticated pull command that filters out files that were not modified after a supplied date[^2].
+A small CLI application written in Rust to transfer files to and from Android devices because Android File Transfer sucks now (or at least last time I checked). At this point[^1], it's probably easier to maintain this project than to try to get Android File Transfer to work.
+
+Currently, the program serves as a thin wrapper around the adb push and pull commands, and has a more sophisticated pull command that filters out files that were not modified after a supplied date[^2].
 
 ## Commands
 

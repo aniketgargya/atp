@@ -26,6 +26,13 @@ enum Commands {
         #[arg(long, default_value_t = false)]
         verbose: bool,
     },
+    PushFiles {
+        source_path: String,
+        destination_path: String,
+        device_name: String,
+        #[arg(long, default_value_t = false)]
+        verbose: bool,
+    },
 }
 
 enum AdbError {
@@ -144,6 +151,12 @@ fn main() {
                 &source_path,
                 &destination_path,
                 &mod_date,
+                &AdbSettings { device_name, verbose }
+            ),
+        Commands::PushFiles { source_path, destination_path, device_name, verbose } =>
+            push_files(
+                &source_path,
+                &destination_path,
                 &AdbSettings { device_name, verbose }
             ),
     };

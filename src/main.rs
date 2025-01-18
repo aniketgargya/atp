@@ -3,7 +3,7 @@ use std::path::Path;
 use clap::{ Parser, Subcommand };
 
 #[derive(Parser)]
-#[command(author = None, version = None, about = None, long_about = None)]
+#[command(author = "Aniket Gargya", version = None, about = None, long_about = None)]
 struct Args {
     #[command(subcommand)]
     cmd: Commands
